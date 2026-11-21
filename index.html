@@ -3,104 +3,157 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI LIVE HOST PRO V2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI LIVE HOST PRO V3</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101329;color:white;font-family:Arial;padding:16px}
-h1{color:#ff55b5}
-.card{background:#20294b;padding:18px;border-radius:16px;margin:14px 0}
-input,textarea{width:100%;padding:14px;margin:7px 0;background:#101329;color:white;border:1px solid #63709a;border-radius:10px}
-button{padding:13px;border:0;border-radius:10px;background:#ff43a5;color:white;font-weight:bold;margin:5px 0;width:100%}
-button.secondary{background:#5141bc}
-#avatar{width:100%;height:330px;object-fit:cover;border-radius:14px;background:#333}
-#status{color:#53e6ad}
+body{margin:0;background:#101323;color:white;font-family:Arial,sans-serif}
+header{background:linear-gradient(120deg,#673de6,#ed3b91);padding:23px 16px;text-align:center}
+header h1{margin:0;font-size:25px}
+header p{margin:7px 0 0;font-size:13px}
+main{padding:15px;max-width:650px;margin:auto}
+.card{background:#1d2238;border:1px solid #343b59;border-radius:15px;padding:16px;margin-bottom:15px}
+h2{font-size:17px;margin:0 0 13px;color:#ff8bc3}
+label{display:block;font-size:13px;margin:12px 0 6px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #454c6c;border-radius:9px;background:#11172a;color:white;font-size:14px}
+textarea{min-height:85px;resize:vertical}
+button{border:0;border-radius:9px;padding:12px 15px;background:#ed3b91;color:white;font-weight:bold;cursor:pointer;margin-top:10px}
+button.secondary{background:#414b70}
+button.green{background:#168d68}
+button:active{opacity:.8}
+.full{width:100%}
+.result{background:#11172a;border-radius:10px;padding:13px;min-height:75px;white-space:pre-wrap;line-height:1.6;font-size:14px}
+.small{font-size:12px;color:#aeb6d1;line-height:1.5}
+.comment{padding:10px;border-bottom:1px solid #343b59;font-size:13px}
+footer{text-align:center;color:#9ca4bd;font-size:11px;padding:15px}
 </style>
 </head>
 <body>
-<h1>AI LIVE HOST PRO</h1>
-<p>Virtual Female Host | TikTok Shopping</p>
+<header>
+<h1>🎤 AI LIVE HOST PRO</h1>
+<p>V3 • Asisten Host Live Shopping</p>
+</header>
 
+<main>
 <div class="card">
-<img id="avatar" alt="Avatar host" src=""
-style="display:none">
-<div id="placeholder" style="text-align:center;padding:80px 5px">
-<h2>👩🏻‍💻</h2>
-Pilih foto host perempuan
-</div>
-<input type="file" accept="image/*" onchange="uploadAvatar(event)">
-<p id="status">Host siap digunakan</p>
-</div>
-
-<div class="card">
-<h3>DATA PRODUK</h3>
-<input id="produk" placeholder="Nama produk">
-<input id="harga" placeholder="Harga produk">
-<textarea id="detail" placeholder="Keunggulan produk"></textarea>
-<button onclick="buatNaskah()">Buat Promosi</button>
+<h2>🛍️ Data Produk</h2>
+<label>Nama Produk</label>
+<input id="nama" placeholder="Contoh: Jaket pria">
+<label>Harga Produk</label>
+<input id="harga" placeholder="Contoh: 75 ribu">
+<label>Keunggulan Produk</label>
+<textarea id="detail" placeholder="Tuliskan bahan, kualitas, ukuran, dan keunggulan produk..."></textarea>
+<button class="full" onclick="buatNaskah()">✨ Buat Naskah Promosi</button>
 </div>
 
 <div class="card">
-<h3>NASKAH HOST AI</h3>
-<textarea id="naskah" rows="6">Halo semuanya! Selamat datang di live kami.</textarea>
-<button onclick="bicara()">▶ MULAI BICARA</button>
-<button class="secondary" onclick="berhenti()">■ BERHENTI</button>
+<h2>📝 Naskah Host AI</h2>
+<div class="result" id="naskah">Naskah promosi akan muncul di sini.</div>
+<button class="full" onclick="bicara()">▶️ Putar Suara Host</button>
+<button class="secondary full" onclick="berhenti()">⏹ Hentikan Suara</button>
 </div>
 
 <div class="card">
-<h3>SIMULASI KOMENTAR</h3>
-<input id="komentar" placeholder="Pertanyaan penonton">
-<button onclick="jawab()">Jawab Komentar</button>
-<p id="jawaban">Jawaban host akan muncul di sini.</p>
+<h2>🎙️ Pengaturan Suara Host</h2>
+<label>Pilih Suara</label>
+<select id="suara"></select>
+<label>Kecepatan: <span id="angkaRate">1.05</span></label>
+<input type="range" id="rate" min="0.8" max="1.3" step="0.05" value="1.05" oninput="angkaRate.textContent=this.value">
+<label>Nada Suara: <span id="angkaPitch">1.15</span></label>
+<input type="range" id="pitch" min="0.8" max="1.5" step="0.05" value="1.15" oninput="angkaPitch.textContent=this.value">
+<p class="small">Suara mengikuti pilihan yang tersedia di browser atau HP. Kualitas dan karakter suara bergantung pada mesin suara perangkat.</p>
 </div>
+
+<div class="card">
+<h2>💬 Simulasi Komentar Pembeli</h2>
+<input id="komentar" placeholder="Contoh: Kak, bahannya bagus tidak?">
+<button class="full" onclick="jawabKomentar()">Balas Komentar</button>
+<div class="result" id="balasan">Balasan host akan muncul di sini.</div>
+</div>
+
+<div class="card">
+<h2>📡 Status Aplikasi</h2>
+<p id="status" class="small">Aplikasi siap digunakan.</p>
+<p class="small">Versi ini berjalan di browser. Komentar masih berupa simulasi, belum terhubung langsung ke TikTok LIVE.</p>
+</div>
+</main>
+
+<footer>AI LIVE HOST PRO V3 • Asisten Host Digital</footer>
 
 <script>
-function uploadAvatar(e){
- const f=e.target.files[0];
- if(!f)return;
- const url=URL.createObjectURL(f);
- document.getElementById('avatar').src=url;
- document.getElementById('avatar').style.display='block';
- document.getElementById('placeholder').style.display='none';
-}
-function buatNaskah(){
- const p=produk.value||'produk pilihan';
- const h=harga.value||'hubungi penjual';
- const d=detail.value||'kualitas bagus dan nyaman';
- naskah.value=`Halo semuanya! Selamat datang di live kami.
-Hari ini kita punya ${p}.
-Harganya hanya ${h}.
-Keunggulannya ${d}.
-Yuk, cek produk dan detail pembelian di keranjang kuning. Terima kasih!`;
-}
-function bicara(){
+const $=id=>document.getElementById(id);
+let voices=[];
+
+function muatSuara(){
  if(!('speechSynthesis' in window)){
- alert('Browser belum mendukung suara');return;
+ $('status').textContent='Browser ini tidak mendukung fitur suara.';
+ return;
  }
- berhenti();
- const u=new SpeechSynthesisUtterance(naskah.value);
+ voices=speechSynthesis.getVoices();
+ $('suara').innerHTML='';
+ let pilihan=voices.filter(v=>v.lang.toLowerCase().includes('id'));
+ if(!pilihan.length) pilihan=voices;
+ pilihan.forEach((v,i)=>{
+  const op=document.createElement('option');
+  op.value=voices.indexOf(v);
+  op.textContent=v.name+' ('+v.lang+')';
+  $('suara').appendChild(op);
+ });
+}
+if('speechSynthesis' in window){
+ muatSuara();
+ speechSynthesis.onvoiceschanged=muatSuara;
+}
+
+function buatNaskah(){
+ const nama=$('nama').value.trim()||'produk pilihan';
+ const harga=$('harga').value.trim();
+ const detail=$('detail').value.trim();
+ const teks=
+ `Halo semuanya! Yuk, lihat ${nama} ini!\n\n`+
+ (detail?`Keunggulannya: ${detail}.\n\n`:'Produk ini menarik untuk kalian lihat lebih dekat.\n\n')+
+ (harga?`Harganya ${harga}. `:'')+
+ `Kalau ingin tahu lebih lanjut, silakan cek detail produknya. Jangan lupa cek keranjang kuning jika tersedia. Terima kasih!`;
+ $('naskah').textContent=teks;
+ $('status').textContent='Naskah promosi berhasil dibuat.';
+}
+
+function bicara(){
+ const teks=$('naskah').textContent;
+ if(!teks||teks.includes('akan muncul')){
+ $('status').textContent='Buat naskah terlebih dahulu.';
+ return;
+ }
+ if(!('speechSynthesis' in window)){
+ $('status').textContent='Fitur suara tidak didukung browser.';
+ return;
+ }
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(teks);
  u.lang='id-ID';
- u.rate=0.92;
- u.pitch=1.08;
- u.onstart=()=>status.textContent='Host sedang berbicara...';
- u.onend=()=>status.textContent='Host siap digunakan';
+ u.rate=parseFloat($('rate').value);
+ u.pitch=parseFloat($('pitch').value);
+ const idx=parseInt($('suara').value);
+ if(voices[idx])u.voice=voices[idx];
+ u.onstart=()=>$('status').textContent='Host sedang berbicara...';
+ u.onend=()=>$('status').textContent='Suara host selesai.';
+ u.onerror=()=>$('status').textContent='Suara tidak dapat diputar.';
  speechSynthesis.speak(u);
 }
 function berhenti(){
- speechSynthesis.cancel();
- status.textContent='Host dihentikan';
+ if('speechSynthesis' in window)speechSynthesis.cancel();
+ $('status').textContent='Suara dihentikan.';
 }
-function jawab(){
- const q=komentar.value.toLowerCase();
- const p=produk.value||'produk ini';
- let a;
- if(q.includes('harga'))a='Harga '+p+' bisa dilihat pada informasi produk ya.';
- else if(q.includes('warna'))a='Silakan cek pilihan warna yang tersedia di produk ya.';
- else if(q.includes('ukuran'))a='Silakan cek variasi ukuran pada halaman produk.';
- else if(q.includes('kirim'))a='Informasi pengiriman tersedia pada halaman produk.';
- else a='Terima kasih pertanyaannya! Silakan cek detail '+p+' di keranjang kuning.';
- jawaban.textContent=a;
- naskah.value=a;
+function jawabKomentar(){
+ const k=$('komentar').value.toLowerCase().trim();
+ if(!k){$('balasan').textContent='Masukkan komentar terlebih dahulu.';return;}
+ let b='Terima kasih sudah mampir! Silakan cek detail produk untuk informasi selengkapnya.';
+ if(k.includes('harga')||k.includes('berapa'))b='Untuk harga, silakan lihat informasi produk di etalase ya. Terima kasih!';
+ else if(k.includes('bahan')||k.includes('kualitas'))b='Untuk bahan dan kualitas, silakan cek deskripsi produk agar informasinya lebih lengkap ya!';
+ else if(k.includes('ukuran')||k.includes('size'))b='Untuk ukuran, silakan periksa pilihan ukuran yang tersedia di detail produk ya!';
+ else if(k.includes('ready')||k.includes('stok'))b='Silakan cek ketersediaan stok pada halaman produk ya!';
+ else if(k.includes('pengiriman')||k.includes('kirim'))b='Informasi pengiriman bisa dilihat pada halaman pemesanan ya!';
+ $('balasan').textContent=b;
 }
 </script>
 </body>
