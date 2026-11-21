@@ -296,5 +296,51 @@ document.getElementById('avatarFileV6').addEventListener('change',function(){
   document.getElementById('avatarStatusV6').textContent='Avatar berhasil ditampilkan.';
 });
 </script>
-body>
+
+<style>
+#avatarPreviewV6.host-speaking {
+  animation: hostMove 0.8s ease-in-out infinite alternate;
+  box-shadow: 0 0 25px #ed3b91;
+}
+@keyframes hostMove {
+  from { transform: scale(1); }
+  to { transform: scale(1.035); }
+}
+#hostSpeakingStatus {
+  text-align:center;
+  color:#ff8bc3;
+  font-weight:bold;
+  margin-top:12px;
+}
+</style>
+
+<div id="hostSpeakingStatus">
+  ⚪ HOST SIAP
+</div>
+
+<script>
+(function(){
+  const avatar=document.getElementById('avatarPreviewV6');
+  const audio=document.getElementById('audioPlayer');
+  const status=document.getElementById('hostSpeakingStatus');
+
+  if(!avatar || !audio) return;
+
+  function mulai(){
+    avatar.classList.add('host-speaking');
+    status.textContent='🟢 HOST SEDANG BERBICARA';
+  }
+
+  function selesai(){
+    avatar.classList.remove('host-speaking');
+    status.textContent='⚪ HOST SIAP';
+  }
+
+  audio.addEventListener('play',mulai);
+  audio.addEventListener('pause',selesai);
+  audio.addEventListener('ended',selesai);
+  audio.addEventListener('error',selesai);
+})();
+</script>
+>
 </html>
