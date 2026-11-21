@@ -273,5 +273,28 @@ function hentikanAudioHost(){
  };
 })();
 </script>
-/body>
+
+<div class="card" id="avatarV6">
+  <h2>👩‍💻 AVATAR HOST V6</h2>
+  <label>Pilih foto host</label>
+  <input type="file" id="avatarFileV6" accept="image/*">
+  <div style="text-align:center;margin-top:15px">
+    <img id="avatarPreviewV6"
+      alt="Avatar Host"
+      style="width:190px;height:240px;object-fit:cover;border-radius:18px;border:3px solid #ed3b91;display:none">
+  </div>
+  <p class="small" id="avatarStatusV6">Belum ada foto avatar.</p>
+</div>
+
+<script>
+document.getElementById('avatarFileV6').addEventListener('change',function(){
+  const file=this.files[0];
+  if(!file)return;
+  const img=document.getElementById('avatarPreviewV6');
+  img.src=URL.createObjectURL(file);
+  img.style.display='inline-block';
+  document.getElementById('avatarStatusV6').textContent='Avatar berhasil ditampilkan.';
+});
+</script>
+body>
 </html>
