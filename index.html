@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI LIVE HOST PRO</title>
+<style>
+body{margin:0;background:#101629;color:white;font-family:Arial;padding:18px}
+.card{background:#202b46;padding:18px;border-radius:15px;margin:12px 0}
+h1{color:#ff69a9}input,textarea,button{width:100%;padding:12px;margin:7px 0;box-sizing:border-box;border-radius:9px;border:0}
+button{background:#ff4f9a;color:white;font-weight:bold}
+textarea,input{background:#101629;color:white;border:1px solid #53617e}
+.avatar{font-size:65px;text-align:center}
+</style>
+</head>
+<body>
+<h1>AI LIVE HOST PRO</h1>
+<p>Virtual Female Host | TikTok Shopping</p>
+<div class="card">
+<div class="avatar">👩🏻‍💻</div>
+<h2>Host Virtual Perempuan</h2>
+<p id="status">Host siap digunakan</p>
+</div>
+<div class="card">
+<h3>Data Produk</h3>
+<input id="produk" placeholder="Nama produk">
+<input id="harga" placeholder="Harga produk">
+<textarea id="detail" placeholder="Keunggulan produk"></textarea>
+<button onclick="buatNaskah()">Buat Promosi</button>
+</div>
+<div class="card">
+<h3>Naskah Host AI</h3>
+<textarea id="naskah">Halo teman-teman! Selamat datang di live kami.</textarea>
+<button onclick="bicara()">▶ Host Berbicara</button>
+<button onclick="berhenti()">■ Berhenti</button>
+</div>
+<div class="card">
+<h3>Simulasi Komentar</h3>
+<input id="komentar" placeholder="Pertanyaan penonton">
+<button onclick="jawab()">Jawab Komentar</button>
+<p id="jawaban">Respons AI akan muncul di sini.</p>
+</div>
+<script>
+function buatNaskah(){
+let p=document.getElementById('produk').value||'produk pilihan';
+let h=document.getElementById('harga').value;
+let d=document.getElementById('detail').value;
+document.getElementById('naskah').value=
+`Halo teman-teman! Yuk kenalan dengan ${p}. ${d} ${h?'Harganya '+h+'.':''} Jangan lupa cek keranjang kuning, ya!`;
+}
+function bicara(){
+if(!('speechSynthesis' in window)){alert('Browser tidak mendukung suara');return;}
+speechSynthesis.cancel();
+let u=new SpeechSynthesisUtterance(document.getElementById('naskah').value);
+u.lang='id-ID';u.rate=.95;
+speechSynthesis.speak(u);
+document.getElementById('status').innerText='Host sedang berbicara';
+u.onend=()=>document.getElementById('status').innerText='Host siap digunakan';
+}
+function berhenti(){
+speechSynthesis.cancel();
+document.getElementById('status').innerText='Host dihentikan';
+}
+function jawab(){
+let q=document.getElementById('komentar').value.toLowerCase();
+let p=document.getElementById('produk').value||'produk ini';
+let h=document.getElementById('harga').value;
+let a=q.includes('harga')?'Harga '+p+' adalah '+(h||'silakan cek etalase')+'.':
+'Terima kasih sudah bertanya! Silakan cek detail '+p+' di etalase kami, ya!';
+document.getElementById('jawaban').innerText=a;
+}
+</script>
+</body>
+</html>
