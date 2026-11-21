@@ -193,5 +193,85 @@ function hentikanAudioHost(){
   audioPlayer.currentTime=0;
 }
 </script>
-</body>
+
+<div class="card" id="autoHostV5">
+  <h2>🤖 AUTO HOST V5</h2>
+  <p class="small">Unggah beberapa audio promosi. Host akan memutarnya bergantian.</p>
+
+  <label>Pilih beberapa audio MP3</label>
+  <input type="file" id="v5Files" accept="audio/*" multiple>
+
+  <label>Jeda antar audio (detik)</label>
+  <input type="number" id="v5Delay" min="1" max="60" value="3">
+
+  <p id="v5Status" class="small">Belum ada audio dipilih.</p>
+  <div id="v5List" class="result">Daftar audio akan muncul di sini.</div>
+
+  <button class="full green" onclick="v5Start()">▶️ MULAI AUTO HOST</button>
+  <button class="full secondary" onclick="v5Stop()">⏹ BERHENTI</button>
+</div>
+
+<script>
+(function(){
+ const filesInput=document.getElementById('v5Files');
+ const player=document.getElementById('audioPlayer');
+ const status=document.getElementById('v5Status');
+ const list=document.getElementById('v5List');
+ let files=[];
+ let index=0;
+ let running=false;
+ let timer=null;
+
+ filesInput.addEventListener('change',()=>{
+   files=Array.from(filesInput.files||[]);
+   list.textContent=files.length
+    ?files.map((f,i)=>(i+1)+'. '+f.name).join('\n')
+    :'Belum ada audio dipilih.';
+   status.textContent=files.length+' audio siap digunakan.';
+ });
+
+ function playNext(){
+   if(!running)return;
+   if(index>=files.length){
+     index=0;
+     status.textContent='Satu putaran selesai. Mengulang daftar audio.';
+   }
+   const file=files[index];
+   player.src=URL.createObjectURL(file);
+   status.textContent='Memutar '+(index+1)+' dari '+files.length+': '+file.name;
+   player.play().catch(()=>{
+     status.textContent='Gagal memutar audio. Tekan MULAI AUTO HOST lagi.';
+     running=false;
+   });
+   index++;
+ }
+
+ player.addEventListener('ended',()=>{
+   if(!running)return;
+   const delay=Math.max(1,Math.min(60,
+     Number(document.getElementById('v5Delay').value)||3));
+   timer=setTimeout(playNext,delay*1000);
+ });
+
+ window.v5Start=function(){
+   if(!files.length){
+     status.textContent='Pilih audio MP3 terlebih dahulu.';
+     return;
+   }
+   clearTimeout(timer);
+   running=true;
+   index=0;
+   playNext();
+ };
+
+ window.v5Stop=function(){
+   running=false;
+   clearTimeout(timer);
+   player.pause();
+   player.currentTime=0;
+   status.textContent='Auto Host dihentikan.';
+ };
+})();
+</script>
+/body>
 </html>
