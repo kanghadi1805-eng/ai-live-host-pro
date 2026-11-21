@@ -156,5 +156,44 @@ function jawabKomentar(){
  $('balasan').textContent=b;
 }
 </script>
+
+<div class="card" id="audioHost">
+  <h2>🎙️ AUDIO HOST AI</h2>
+  <label>Unggah suara host MP3</label>
+  <input type="file" id="fileAudio" accept="audio/mpeg,audio/mp3">
+  <audio id="audioPlayer" controls style="width:100%;margin-top:12px"></audio>
+  <button class="full green" onclick="putarAudioHost()">▶️ Putar Suara Host</button>
+  <button class="full secondary" onclick="hentikanAudioHost()">⏹ Hentikan</button>
+  <p class="small">Audio diputar langsung dari file di HP Anda.</p>
+</div>
+
+<script>
+const fileAudio=document.getElementById('fileAudio');
+const audioPlayer=document.getElementById('audioPlayer');
+let audioURL=null;
+
+fileAudio.addEventListener('change',function(){
+  if(audioURL)URL.revokeObjectURL(audioURL);
+  const file=this.files[0];
+  if(!file)return;
+  audioURL=URL.createObjectURL(file);
+  audioPlayer.src=audioURL;
+});
+
+function putarAudioHost(){
+  if(!audioPlayer.src){
+    alert('Silakan unggah audio MP3 terlebih dahulu.');
+    return;
+  }
+  audioPlayer.play();
+}
+
+function hentikanAudioHost(){
+  audioPlayer.pause();
+  audioPlayer.currentTime=0;
+}
+</script>
 </body>
+</html>
+body>
 </html>
