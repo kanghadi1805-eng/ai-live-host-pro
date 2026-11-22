@@ -433,4 +433,71 @@ document.getElementById('avatarFileV6').addEventListener('change',function(){
 })();
 </script>
 
+<style>
+#avatarStageV71 {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+#avatarStageV71 img {
+  display: block;
+}
+
+#mouthV71 {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  width: 28px;
+  height: 5px;
+  border-radius: 50%;
+  background: #54201f;
+  border: 1px solid #e8a3a0;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#mouthV71.active {
+  opacity: 1;
+  animation: mouthTalkV71 0.22s infinite alternate;
+}
+
+@keyframes mouthTalkV71 {
+  from { height: 4px; transform: translateX(-50%) scaleX(0.8); }
+  to { height: 15px; transform: translateX(-50%) scaleX(1.15); }
+}
+</style>
+
+<script>
+(function () {
+  const audio = document.getElementById("audioPlayer");
+  const avatar = document.getElementById("avatarPreviewV6");
+
+  if (!audio || !avatar || document.getElementById("mouthV71")) return;
+
+  const stage = document.createElement("div");
+  stage.id = "avatarStageV71";
+
+  avatar.parentNode.insertBefore(stage, avatar);
+  stage.appendChild(avatar);
+
+  const mouth = document.createElement("div");
+  mouth.id = "mouthV71";
+  stage.appendChild(mouth);
+
+  audio.addEventListener("play", function () {
+    mouth.classList.add("active");
+  });
+
+  function stopMouth() {
+    mouth.classList.remove("active");
+  }
+
+  audio.addEventListener("pause", stopMouth);
+  audio.addEventListener("ended", stopMouth);
+  audio.addEventListener("error", stopMouth);
+})();
+</script>
+</body>
 </html>
